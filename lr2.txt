@@ -1,0 +1,82 @@
+Лабораторная работа №2
+Списки контроля доступа к файлам и папкам (ACL)
+
+
+1. ACL прав доступа - определяют права доступа к файлу или папки для различных пользователей
+2. ACL по умолчанию - назначаются только папкам, вновь создаваемые объекты внутри такой папки наследуют ACL
+от родительской папки
+
+getfacl - позволяет просматривать списки контроля доступа
+setfacl - позволяет устанавливать и редактировать списки контроля доступа
+
+
+student@alexander-VirtualBox:~$ setfacl -m u:tmp6:rwx SB008/
+student@alexander-VirtualBox:~$ setfacl -m u:tmp7:rwx SB008/
+student@alexander-VirtualBox:~$ getfacl SB008/
+# file: SB008/
+# owner: student
+# group: student
+# flags: --t
+user::rwx
+user:tmp6:rwx
+user:tmp7:rwx
+group::rwx
+mask::rwx
+other::rwx
+
+student@alexander-VirtualBox:~$ setfacl -m g:tempgrp:rwx SB008/
+student@alexander-VirtualBox:~$ setfacl -m g:tempgrp2:r-x SB008/
+student@alexander-VirtualBox:~$ getfacl SB008/
+# file: SB008/
+# owner: student
+# group: student
+# flags: --t
+user::rwx
+user:tmp6:rwx
+user:tmp7:rwx
+group::rwx
+group:tempgrp:rwx
+group:tempgrp2:r-x
+mask::rwx
+other::rwx
+
+
+student@alexander-VirtualBox:~$ sudo chmod ugo-w SB008/
+student@alexander-VirtualBox:~$ ls -l
+итого 60
+-rw-rw-r--  1 student student    0 окт 30 09:35  2
+-rw-rw-r--  1 student student 2123 окт 19 15:20  ib.text
+-rw-rw-r--  1 student student  620 окт 16 13:22  lr1.txt
+drwxrwxr-x  2 student student 4096 сен  7 15:30  prpd
+drwxrwxr-x  6 student student 4096 авг 30 14:19  real
+dr-xr-xr-t+ 4 student student 4096 ноя  6 12:49  SB008
+drwx------  5 student student 4096 сен  3 10:17  snap
+drwxr-xr-x+ 3 student student 4096 ноя  6 09:21  sStickyBit
+drwxr-xr-x  2 student student 4096 авг 30 14:05  Видео
+drwxr-xr-x  2 student student 4096 авг 30 14:05  Документы
+drwxr-xr-x  2 student student 4096 авг 30 14:05  Загрузки
+drwxr-xr-x  3 student student 4096 сен 12 14:51  Изображения
+drwxr-xr-x  2 student student 4096 авг 30 14:05  Музыка
+drwxr-xr-x  2 student student 4096 авг 30 14:05  Общедоступные
+drwxr-xr-x  3 student student 4096 окт 19 12:28 'Рабочий стол'
+drwxr-xr-x  2 student student 4096 авг 30 14:05  Шаблоны
+
+
+student@alexander-VirtualBox:~$ getfacl SB008/
+# file: SB008/
+# owner: student
+# group: student
+# flags: --t
+user::r-x
+user:tmp6:rwx			#effective:r-x
+user:tmp7:rwx			#effective:r-x
+group::rwx			#effective:r-x
+group:tempgrp:rwx		#effective:r-x
+group:tempgrp2:r-x
+mask::r-x
+other::r-x
+
+
+
+
+
